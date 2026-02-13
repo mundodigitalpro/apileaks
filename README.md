@@ -1,30 +1,45 @@
-# API Leaks Scraper
+# APIRadar Scraper
 
-Scraper para extraer datos de [APIRadar](https://apiradar.live) usando autenticación OAuth de Google.
+## El problema
+APIRadar es una app React (Next.js) que carga datos dinámicamente. Necesita navegador real con JavaScript.
 
-## Estructura
+## Solución 1: Ejecutar en máquina con navegador
 
+### Setup
+```bash
+# En tu PC/Mac/Linux con Node.js
+npm install
+npx playwright install chromium
 ```
-apileaks/
-├── config/           # Configuración
-├── scraper/          # Módulos de scraping
-├── data/             # Datos extraídos
-├── main.py           # Entry point
-└── requirements.txt
+
+### Uso
+```bash
+# Primera vez (login manual)
+node main.js
+
+# Luego (automatizado)
+node main.js --headless
 ```
 
-## Setup
+## Solución 2: SSH al old-phone
+Si el old-phone (10.17.4.17) tiene entorno gráfico o puede correr browsers headless:
 
 ```bash
-pip install -r requirements.txt
-playwright install chromium
+ssh -p 8022 u_a101@10.17.4.17
+# Instalar node + playwright allí
 ```
 
-## Uso
+## Solución 3: API alternativa
+Revisar si APIRadar expone API REST pública. Probar:
+- https://apiradar.live/api/leaks
+- https://apiradar.live/api/explore
+- Inspeccionar Network tab en DevTools
 
-```bash
-python main.py
-```
+## Estado actual
+- ✅ Código listo (Node.js + Playwright)
+- ❌ No corre en Android/Termux (Playwright no soporta android)
+- ⏳ Necesita entorno Linux/macOS/Windows
 
-Primera ejecución: abrirá navegador para login con Google (headless=False).
-Las siguientes: usa sesión guardada (headless=True).
+## Next steps
+1. Probar en old-phone vía SSH
+2. O ejecutar en PC local con `git clone`
