@@ -1,0 +1,28 @@
+# API Keys y credenciales
+.env
+session/
+*.json
+!example.config.json
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+
+# Datos extraídos (sensibles)
+data/*.json
+data/*.csv
+data/*.txt
+!data/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
