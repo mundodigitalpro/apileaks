@@ -115,7 +115,20 @@ class APIRadarClient:
         if time_range:
             params["timeRange"] = time_range
 
-        resp = self.http.get(self.LEAKS_ENDPOINT, params=params)
+        for attempt in range(4):
+            resp = self.http.get(self.LEAKS_ENDPOINT, params=params)
+            if resp.status_code == 429:
+                wait = int(resp.headers.get("Retry-After", 10))
+                print(f"   ⏳ Rate limit (429). Esperando {wait}s...")
+                time.sleep(wait)
+                continue
+            if resp.status_code in (502, 503, 504) and attempt < 3:
+                wait = 3 * (attempt + 1)
+                print(f"   ⚠️  Error {resp.status_code}. Reintento en {wait}s...")
+                time.sleep(wait)
+                continue
+            resp.raise_for_status()
+            return resp.json()
         resp.raise_for_status()
         return resp.json()
 
@@ -168,30 +181,40 @@ class APIRadarClient:
             return self.all_leaks
 
         # Paginar mientras haya más
-        while has_more:
-            if max_leaks and len(self.all_leaks) >= max_leaks:
-                self.all_leaks = self.all_leaks[:max_leaks]
-                break
+        try:
+            while has_more:
+                if max_leaks and len(self.all_leaks) >= max_leaks:
+                    self.all_leaks = self.all_leaks[:max_leaks]
+                    break
 
-            page += 1
-            time.sleep(delay)
+                page += 1
+                time.sleep(delay)
 
-            data = self.fetch_leaks(
-                page=page,
-                limit=limit_per_page,
-                provider=provider,
-                sort_by=sort_by,
-                time_range=time_range,
-            )
+                data = self.fetch_leaks(
+                    page=page,
+                    limit=limit_per_page,
+                    provider=provider,
+                    sort_by=sort_by,
+                    time_range=time_range,
+                )
 
-            leaks = data.get("leaks", [])
-            has_more = data.get("hasMore", False)
+                leaks = data.get("leaks", [])
+                has_more = data.get("hasMore", False)
 
-            if not leaks:
-                break
+                if not leaks:
+                    break
 
-            self.all_leaks.extend(leaks)
-            print(f"   Página {page}: +{len(leaks)} leaks (total: {len(self.all_leaks)})")
+                self.all_leaks.extend(leaks)
+                print(f"   Página {page}: +{len(leaks)} leaks (total: {len(self.all_leaks)})")
+
+        except (KeyboardInterrupt, Exception) as e:
+            if self.all_leaks:
+                print(f"\n⚠️  Error en página {page}: {e}")
+                print(f"   Guardando {len(self.all_leaks)} leaks descargados hasta ahora...")
+                self.export_to_json()
+            if isinstance(e, KeyboardInterrupt):
+                raise
+            raise
 
         return self.all_leaks
 
