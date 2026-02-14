@@ -128,9 +128,22 @@ class APIRadarClient:
                 time.sleep(wait)
                 continue
             resp.raise_for_status()
-            return resp.json()
+            data = resp.json()
+            self._enrich_leaks(data.get("leaks", []))
+            return data
         resp.raise_for_status()
-        return resp.json()
+        data = resp.json()
+        self._enrich_leaks(data.get("leaks", []))
+        return data
+
+    @staticmethod
+    def _enrich_leaks(leaks: List[Dict[str, Any]]):
+        """Añade fileUrl (enlace directo al archivo en GitHub) a cada leak."""
+        for leak in leaks:
+            repo = leak.get("repoUrl", "")
+            fp = leak.get("filePath", "")
+            if repo and fp:
+                leak["fileUrl"] = f"{repo}/blob/HEAD/{fp}"
 
     def fetch_all_leaks(
         self,
