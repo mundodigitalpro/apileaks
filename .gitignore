@@ -26,6 +26,7 @@ report_*.md
 # IDE
 .vscode/
 .idea/
+.claude/
 *.swp
 *.swo
 *~
