@@ -81,8 +81,33 @@ Without auth: max 4 leaks (free plan). With auth: full pagination.
 - The `login()` method in `auth.py` starts `sync_playwright()` and returns page/browser/playwright — caller must close.
 - The API client reuses cookies from the Playwright session file — no separate auth needed.
 
+## Coding Style & Naming Conventions
+
+- 4-space indentation, `snake_case` for functions/variables, `UPPER_CASE` for constants (see `config/settings.py`).
+- Keep modules focused: auth logic in `auth.py`, HTTP client logic in `api_client.py`, DOM extraction in `apiradar.py`.
+- Prefer explicit CLI flags and clear help text when adding arguments in `main.py`.
+- Use concise docstrings for public functions and classes.
+
+## Testing
+
+No formal test suite yet. Before any change, run smoke checks:
+
+```bash
+python main.py --api --limit 5
+python main.py --headless --limit 5   # requires saved session
+```
+
+Verify output files are generated in `data/` and avoid committing extracted data.
+
+## Commit Guidelines
+
+- Short, imperative subjects: `Add retry logic to API client`, `Update README with CLI examples`.
+- One logical change per commit.
+- Include in PR description: what changed and why, how validated, any auth/session or selector impact.
+
 ## Sensitive files (gitignored)
 
 - `session/` — OAuth tokens
 - `data/*.json` — extracted leak data with partial API keys
 - `.env` — environment config
+- Never commit extracted leak artifacts or session cookies.

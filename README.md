@@ -184,12 +184,14 @@ Los datos se exportan como JSON en el directorio `data/`:
 apileaks/
 ├── main.py              # Entry point Python (API + scraper)
 ├── requirements.txt     # Dependencias Python
+├── CLAUDE.md            # Referencia técnica para agentes AI
 ├── config/
 │   └── settings.py      # Configuracion central (URLs, paths, env vars)
 ├── scraper/
 │   ├── auth.py          # AuthManager — OAuth login, sesion
 │   ├── apiradar.py      # APIRadarScraper — Playwright, CSS selectors
 │   └── api_client.py    # APIRadarClient — HTTP directo a /api/leaks
+├── prompts/             # Prompts de configuracion
 ├── session/             # Sesion OAuth guardada (gitignored)
 ├── data/                # Archivos JSON de salida (gitignored)
 └── .env                 # Variables de entorno opcionales (gitignored)

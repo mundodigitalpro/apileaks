@@ -10,6 +10,17 @@ Todos los cambios notables en el proyecto APILeaks.
 
 ---
 
+## 2026-03-03
+
+### Changed
+- **Eliminado stack Node.js** — `main.js`, `package.json`, `package-lock.json`, `node_modules/` eliminados. Stack único: Python.
+- **`DEPLOYMENT_PLAN.md` y `SETUP_LOCAL.md` actualizados** — migrados de Node.js a Python (venv, pip, playwright).
+- **`MEMORY.md` eliminado** — contenido absorbido en `CLAUDE.md`.
+- **`AGENTS.md` eliminado** — coding style, testing y commit guidelines fusionados en `CLAUDE.md`.
+- **`.claude/` añadido al `.gitignore`**.
+
+---
+
 ## 2026-02-14
 
 ### Descubierto
@@ -104,9 +115,7 @@ apileaks/
 ├── SETUP_LOCAL.md            # Guía de setup local
 ├── DEPLOYMENT_PLAN.md        # Guía de despliegue VPS
 ├── CHANGELOG.md              # Este archivo
-├── CLAUDE.md                 # Instrucciones para Claude Code
-├── AGENTS.md                 # Instrucciones para agentes AI
-├── MEMORY.md                 # Contexto técnico del proyecto
+├── CLAUDE.md                 # Instrucciones para agentes AI
 ├── main.py                   # Entry point Python
 ├── requirements.txt          # Dependencias Python
 ├── config/
