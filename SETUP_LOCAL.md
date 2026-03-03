@@ -14,14 +14,17 @@ gráfica el VPS, se hace el login en local y se copia la sesión.
 ```bash
 git clone https://github.com/mundodigitalpro/apileaks.git
 cd apileaks
-npm install
-npx playwright install chromium
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+playwright install chromium
 ```
 
 ## Paso 2 - Login con Google
 
 ```bash
-node main.js
+source venv/bin/activate
+python main.py
 ```
 
 Se abrirá Chrome automáticamente:
@@ -48,7 +51,8 @@ scp session/apiradar_session.json josejordan@<IP-VPS>:~/apps/apileaks/session/ap
 ```bash
 ssh josejordan@<IP-VPS>
 cd ~/apps/apileaks
-node main.js --headless
+source venv/bin/activate
+python main.py --api
 ```
 
 ---
@@ -60,7 +64,8 @@ Si la sesión caduca, repetir desde el Paso 2:
 ```bash
 # En local
 rm session/apiradar_session.json
-node main.js
+source venv/bin/activate
+python main.py
 # ... hacer login de nuevo ...
 scp session/apiradar_session.json josejordan@<IP-VPS>:~/apps/apileaks/session/apiradar_session.json
 ```
@@ -69,6 +74,6 @@ scp session/apiradar_session.json josejordan@<IP-VPS>:~/apps/apileaks/session/ap
 
 ## Requisitos
 
-- Node.js 20+
-- npm
+- Python 3.10+
+- pip / venv
 - Acceso SSH al VPS

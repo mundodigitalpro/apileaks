@@ -18,13 +18,12 @@ Despliegue del scraper APIRadar en VPS para ejecución automatizada y persistent
 # Actualizar sistema
 sudo apt update && sudo apt upgrade -y
 
-# Instalar Node.js 20.x
-curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-sudo apt install -y nodejs
+# Instalar Python 3 y pip
+sudo apt install -y python3 python3-pip python3-venv
 
 # Verificar instalación
-node --version  # v20.x.x
-npm --version   # 10.x.x
+python3 --version  # 3.10+
+pip3 --version
 
 # Instalar dependencias para Playwright/Chromium
 sudo apt install -y \
@@ -54,14 +53,19 @@ cd apileaks
 
 ### 2.2 Instalar dependencias
 ```bash
-npm install
-npx playwright install chromium
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+playwright install chromium
 ```
 
 ### 2.3 Primera ejecución (login manual)
 ```bash
+# Activar entorno virtual
+source venv/bin/activate
+
 # Modo interactivo para autenticación
-node main.js
+python main.py
 ```
 > **Nota:** Requiere conexión SSH con forwarding de X11 o usar `xvfb` para entorno virtual.
 
@@ -71,7 +75,7 @@ Alternativa headless-first:
 sudo apt install -y xvfb
 
 # Ejecutar con display virtual
-xvfb-run -a node main.js
+xvfb-run -a python main.py
 ```
 
 ---
@@ -83,10 +87,11 @@ Crear `/opt/apileaks/run.sh`:
 ```bash
 #!/bin/bash
 cd /opt/apileaks
+source venv/bin/activate
 export DISPLAY=:99
 Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
 sleep 2
-node main.js --headless
+python main.py --api
 ```
 
 ```bash
@@ -104,8 +109,8 @@ After=network.target
 Type=oneshot
 User=apileaks
 WorkingDirectory=/opt/apileaks
-ExecStart=/usr/bin/xvfb-run -a /usr/bin/node main.js --headless
-Environment="NODE_ENV=production"
+ExecStart=/opt/apileaks/venv/bin/python main.py --api
+Environment="PYTHONUNBUFFERED=1"
 
 [Install]
 WantedBy=multi-user.target
@@ -203,11 +208,11 @@ sudo chown apileaks:apileaks /opt/apileaks/.env
 
 | Acción | Comando |
 |--------|---------|
-| Ejecutar manualmente | `cd /opt/apileaks && node main.js` |
+| Ejecutar manualmente | `cd /opt/apileaks && source venv/bin/activate && python main.py --api` |
 | Ver estado servicio | `sudo systemctl status apileaks` |
 | Reiniciar servicio | `sudo systemctl restart apileaks` |
 | Ver logs | `tail -f /var/log/apileaks.log` |
-| Actualizar código | `cd /opt/apileaks && git pull && npm install` |
+| Actualizar código | `cd /opt/apileaks && git pull && pip install -r requirements.txt` |
 
 ---
 
@@ -215,7 +220,8 @@ sudo chown apileaks:apileaks /opt/apileaks/.env
 
 ### Error: "browserType.launch: Executable doesn't exist"
 ```bash
-npx playwright install chromium
+source venv/bin/activate
+playwright install chromium
 ```
 
 ### Error: "Cannot start X display"
@@ -229,7 +235,8 @@ Xvfb :99 &
 Borrar archivo de sesión y re-autenticar:
 ```bash
 rm /opt/apileaks/session/apiradar_session.json
-node main.js  # Login manual de nuevo
+source venv/bin/activate
+python main.py  # Login manual de nuevo
 ```
 
 ---
