@@ -7,7 +7,6 @@ Todos los cambios notables en el proyecto APILeaks.
 ### Próximos pasos
 - [ ] Despliegue en VPS
 - [ ] Configuración de cron para ejecución automatizada
-- [ ] Explorar autenticación para desbloquear paginación completa de API
 
 ---
 
@@ -106,19 +105,17 @@ apileaks/
 ├── DEPLOYMENT_PLAN.md        # Guía de despliegue VPS
 ├── CHANGELOG.md              # Este archivo
 ├── CLAUDE.md                 # Instrucciones para Claude Code
-├── main.py                   # Entry point Python (primary)
-├── main.js                   # Entry point Node.js (fallback)
+├── AGENTS.md                 # Instrucciones para agentes AI
+├── MEMORY.md                 # Contexto técnico del proyecto
+├── main.py                   # Entry point Python
 ├── requirements.txt          # Dependencias Python
-├── package.json              # Dependencias Node.js
 ├── config/
-│   ├── settings.py           # Configuración Python
-│   └── settings.js           # Configuración Node.js
+│   └── settings.py           # Configuración Python
 ├── scraper/
 │   ├── auth.py               # Autenticación OAuth (Python)
 │   ├── apiradar.py           # Scraping con Playwright (Python)
-│   ├── api_client.py         # Cliente API directo (Python) ← NUEVO
-│   ├── auth.js               # Autenticación OAuth (Node.js)
-│   └── apiradar.js           # Scraping (Node.js)
+│   └── api_client.py         # Cliente API directo (Python)
+├── prompts/                  # Prompts de configuración
 ├── data/                     # Datos extraídos (gitignored)
 └── session/                  # Sesiones guardadas (gitignored)
 ```
@@ -178,4 +175,4 @@ GET /api/auth/csrf      → { csrfToken: "..." }
 
 - **Repositorio**: https://github.com/mundodigitalpro/apileaks
 - **Target**: https://apiradar.live
-- **Stack**: Python 3 + Playwright + requests (primary), Node.js (fallback)
+- **Stack**: Python 3 + Playwright + requests
