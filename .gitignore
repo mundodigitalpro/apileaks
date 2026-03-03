@@ -20,6 +20,9 @@ data/*.csv
 data/*.txt
 !data/.gitkeep
 
+# Informes con claves API (sensibles)
+report_*.md
+
 # IDE
 .vscode/
 .idea/
