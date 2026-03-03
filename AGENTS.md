@@ -8,9 +8,6 @@ Primary code is Python-first:
 - `data/`: exported leak datasets (`.json`, gitignored except `data/.gitkeep`).
 - `session/`: Playwright auth session state (sensitive, gitignored).
 
-Secondary fallback:
-- `main.js`: Node.js debug/fallback scraper implementation.
-
 Docs and ops context:
 - `README.md`, `SETUP_LOCAL.md`, `DEPLOYMENT_PLAN.md`, `CHANGELOG.md`.
 
@@ -20,9 +17,6 @@ Docs and ops context:
 - `python main.py`: interactive scraper login flow (first run) or scraper mode.
 - `python main.py --api --limit 100`: fast API extraction mode.
 - `python main.py --headless --load-more --max-pages 50`: headless scraper with pagination by scroll.
-- `node main.js`: Node fallback/debug path.
-
-Note: `npm test` is currently a placeholder and intentionally fails.
 
 ## Coding Style & Naming Conventions
 - Follow existing Python style: 4-space indentation, `snake_case` for functions/variables, `UPPER_CASE` for constants (see `config/settings.py`).

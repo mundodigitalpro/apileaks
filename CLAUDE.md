@@ -11,8 +11,6 @@ APILeaks extracts leaked API key data from [APIRadar](https://apiradar.live). Tw
 
 APIRadar uses Next.js with CSR and has an internal REST API discovered via JS chunk analysis.
 
-Two parallel implementations exist: **Python (primary)** and **Node.js (fallback)**.
-
 ## Commands
 
 ```bash
@@ -34,9 +32,6 @@ python main.py --api --sort-by oldest --time-range 30d
 python main.py --headless                         # headless (requires saved session)
 python main.py --headless --load-more             # infinite scroll (no page limit)
 python main.py --headless --load-more --max-pages 50
-
-# Node.js scraper (fallback)
-node main.js
 ```
 
 No test suite or linter is configured yet.
@@ -45,7 +40,6 @@ No test suite or linter is configured yet.
 
 ```
 main.py                  # Python CLI entry point (api + scraper modes)
-main.js                  # Node.js fallback entry point
 config/settings.py       # Central config (paths, URLs, env vars)
 scraper/
   auth.py                # AuthManager — OAuth login, session save/load
@@ -86,7 +80,6 @@ Without auth: max 4 leaks (free plan). With auth: full pagination.
 - CSS selectors in `scraper/apiradar.py` are calibrated against the real APIRadar DOM (grid > div.relative cards).
 - The `login()` method in `auth.py` starts `sync_playwright()` and returns page/browser/playwright — caller must close.
 - The API client reuses cookies from the Playwright session file — no separate auth needed.
-- The Node.js version (`main.js`) is a simpler debug-oriented fallback.
 
 ## Sensitive files (gitignored)
 

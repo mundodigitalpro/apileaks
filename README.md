@@ -15,8 +15,6 @@ APILeaks ofrece dos modos de extraccion:
 | **API** | `python main.py --api` | Peticiones HTTP directas a la API interna de APIRadar. Rapido, sin navegador. |
 | **Scraper** | `python main.py` | Automatizacion con Playwright (navegador). Usa CSS selectors contra el DOM real. |
 
-Tambien existe una implementacion Node.js (`main.js`) como fallback de debug.
-
 ---
 
 ## Requisitos
@@ -121,14 +119,6 @@ python main.py --headless --load-more --max-pages 50
 python main.py --headless --limit 100
 ```
 
-### Node.js (fallback)
-
-Version simplificada para debug:
-
-```bash
-node main.js
-```
-
 ---
 
 ## Referencia de opciones
@@ -193,7 +183,6 @@ Los datos se exportan como JSON en el directorio `data/`:
 ```
 apileaks/
 ├── main.py              # Entry point Python (API + scraper)
-├── main.js              # Entry point Node.js (fallback)
 ├── requirements.txt     # Dependencias Python
 ├── config/
 │   └── settings.py      # Configuracion central (URLs, paths, env vars)
